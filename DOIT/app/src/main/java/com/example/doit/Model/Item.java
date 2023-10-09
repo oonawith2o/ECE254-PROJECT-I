@@ -52,7 +52,7 @@ public class Item {
     /**
      * SET METHODS
      */
-    private void setItemID(int itemID) { this.itemID = itemID; }
+    public void setItemID(int itemID) { this.itemID = itemID; }
     public void setSubject(String subject) { this.subject = subject; }
     public void setNote(String note) { this.note = note; }
     public void setCompleted(boolean completed) { this.completed = completed; }

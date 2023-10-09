@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.Window;
 
 import com.example.doit.Adapter.ItemAdapter;
 import com.example.doit.Model.Item;
@@ -15,13 +17,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnDialogCloseListner {
 
     private RecyclerView mainRecyclerView;
     private FloatingActionButton mainAddButton;
     private DataBaseHelper mainDatabase;
-    private ArrayList<Item> mainList;
+    private List<Item> mainList;
     private ItemAdapter adapter;
 
 
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
         mainRecyclerView = findViewById(R.id.recyclerView);
@@ -49,5 +53,13 @@ public class MainActivity extends AppCompatActivity {
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new RecyclerViewTouchHelper(adapter));
         itemTouchHelper.attachToRecyclerView(mainRecyclerView);
+    }
+
+    @Override
+    public void onDialogClose(DialogInterface dialogInterface) {
+        mainList = mainDatabase.getAllTasks();
+        Collections.reverse(mainList);
+        adapter.setTask(mainList);
+        adapter.notifyDataSetChanged();
     }
 }

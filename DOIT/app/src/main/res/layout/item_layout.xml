@@ -52,8 +52,8 @@
             android:layout_column="2"
             android:layout_columnSpan="1"
             android:fontFamily="@font/calibri"
-            android:text="10/02/2023 19PM"
-            android:textSize="8sp" />
+            android:text="10/02/2023 9PM"
+            android:textSize="15sp" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/checkboxCompleted"

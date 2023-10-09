@@ -2,6 +2,7 @@ package com.example.doit;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -38,6 +39,7 @@ public class AddNewItem extends DialogFragment {
     @NonNull
     @Override
     public View onCreateView(@Nullable LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.item_popup, container, false);
     }
 
@@ -47,11 +49,15 @@ public class AddNewItem extends DialogFragment {
         return super.onCreateDialog(savedInstanceState);
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceStatus) {
         super.onViewCreated(view, savedInstanceStatus);
 
         saveButton = view.findViewById(R.id.saveButton);
+        saveButton.setEnabled(false);
+        saveButton.setBackgroundColor(R.color.dark);
+        saveButton.setTextColor(Color.WHITE);
         Button cancleButton = view.findViewById(R.id.cancelButton);
         editSubject = view.findViewById(R.id.editTextSubject);
         editNote = view.findViewById(R.id.editTextNote);
@@ -82,14 +88,7 @@ public class AddNewItem extends DialogFragment {
             @SuppressLint("ResourceAsColor")
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.toString().equals("")) {
-                    saveButton.setEnabled(false);
-                    saveButton.setBackgroundColor(R.color.dark);
-                    saveButton.setTextColor(Color.WHITE);
-                } else {
-                    saveButton.setEnabled(true);
-                    saveButton.setBackgroundColor(R.color.blue);
-                }
+
             }
 
             @SuppressLint("ResourceAsColor")
@@ -110,29 +109,34 @@ public class AddNewItem extends DialogFragment {
 
             }
         });
+        final boolean finalIsUpdate = isUpdated;
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String subject = editSubject.getText().toString();
+                String note = editNote.getText().toString();
 
-        final boolean finalIsUpdated = isUpdated;
+                if (finalIsUpdate){
+                    database.updateTask(bundle.getInt("id") , subject, note);
+                }else{
+                    Item item = new Item();
+                    item.setSubject(subject);
+                    item.setNote(note);
+                    item.setCompleted(false);
+                    database.insertTask(item);
+                }
+                dismiss();
 
-        saveButton.setOnClickListener(view12 -> {
-            String subject = editSubject.getText().toString();
-            String note = editNote.getText().toString();
-
-            System.out.println("HERE");
-
-            if (finalIsUpdated) {
-                database.updateTask(bundle.getInt("id"), subject, note);
-            } else {
-                Item item = new Item();
-                item.setSubject(subject);
-                item.setNote(note);
-                item.setCompleted(false);
-                database.insertTask(item);
             }
-            dismiss();
         });
 
         cancleButton.setOnClickListener(view1 -> dismiss());
 
     }
 
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+
+    }
 }

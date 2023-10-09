@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import com.example.doit.Model.Item;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
 
@@ -19,9 +20,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "DOIT_DATABASE";
     private static final String TABLE_NAME = "ITEMS_TABLE";
-    private static final String[] ITEMS_COLUMNS = {"ID", "SUBJECT", "NOTES", "COMPLETED", "ITEM_CREATION_TIME_DATE", "ITEM_DUE_DATE_TIME", "PRIORITY", "PARTICIPANTS"};
-
-
+    private static final String COL_1 = "ID";
+    private static final String COL_2 = "SUBJECT";
+    private static final String COL_3 = "NOTE";
+    private static final String COL_4 = "COMPLETED";
 
     public DataBaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -29,8 +31,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(ID INTEGER PRIMARY KEY AUTOINCREMENT, SUBJECT TEXT, NOTES TEXT, COMPLETED INTEGER)");
-
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(ID INTEGER PRIMARY KEY AUTOINCREMENT , SUBJECT TEXT , NOTE TEXT, COMPLETED INTEGER)");
     }
 
     @Override
@@ -42,18 +43,24 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public void insertTask(Item item) {
         database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(ITEMS_COLUMNS[0], item.getItemID());
-        contentValues.put(ITEMS_COLUMNS[1], item.getSubject());
-        contentValues.put(ITEMS_COLUMNS[2], item.getNote());
-        contentValues.put(ITEMS_COLUMNS[3], item.isCompleted());
+        contentValues.put(COL_2, item.getSubject());
+        contentValues.put(COL_3, item.getNote());
+        contentValues.put(COL_4, item.isCompleted());
         database.insert(TABLE_NAME, null, contentValues);
     }
 
     public void updateTask(int ID, String subject, String note) {
         database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(ITEMS_COLUMNS[1], subject);
-        contentValues.put(ITEMS_COLUMNS[2], note);
+        contentValues.put(COL_2, subject);
+        contentValues.put(COL_3, note);
+        database.update(TABLE_NAME, contentValues, "ID=?", new String[]{String.valueOf(ID)});
+    }
+
+    public void updateCompleted(int ID, int completed) {
+        database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_4, completed);
         database.update(TABLE_NAME, contentValues, "ID=?", new String[]{String.valueOf(ID)});
     }
 
@@ -63,10 +70,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     @SuppressLint("Range")
-    public ArrayList<Item> getAllTasks() {
+    public List<Item> getAllTasks() {
+
         database = this.getWritableDatabase();
         Cursor cursor = null;
-        ArrayList<Item> taskList = new ArrayList<>();
+        List<Item> taskList = new ArrayList<>();
 
         database.beginTransaction();
         try {
@@ -75,17 +83,18 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 if (cursor.moveToFirst()) {
                     do {
                         Item item = new Item();
-                        item.setAll(cursor.getInt(cursor.getColumnIndex(ITEMS_COLUMNS[0])), cursor.getString(cursor.getColumnIndex(ITEMS_COLUMNS[1])), cursor.getString(cursor.getColumnIndex(ITEMS_COLUMNS[2])), (1 == cursor.getInt(cursor.getColumnIndex(ITEMS_COLUMNS[3]))), null, null, -1, null);
+                        item.setItemID(cursor.getInt(cursor.getColumnIndex(COL_1)));
+                        item.setSubject(cursor.getString(cursor.getColumnIndex(COL_2)));
+                        item.setNote(cursor.getString(cursor.getColumnIndex(COL_3)));
+                        item.setCompleted(cursor.getInt(cursor.getColumnIndex(COL_4))==1);
                         taskList.add(item);
                     } while (cursor.moveToNext());
                 }
             }
         }  finally {
             database.endTransaction();
-            assert cursor != null;
             cursor.close();
         }
-
         return taskList;
     }
 }

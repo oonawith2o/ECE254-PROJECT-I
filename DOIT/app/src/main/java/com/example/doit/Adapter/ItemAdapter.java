@@ -11,12 +11,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.doit.AddNewItem;
 import com.example.doit.MainActivity;
 import com.example.doit.Model.Item;
 import com.example.doit.R;
 import com.example.doit.Utils.DataBaseHelper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
@@ -56,7 +56,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         return activity;
     }
 
-    public void setTask(ArrayList<Item> taskList) {
+    public void setTask(List<Item> taskList) {
         this.taskList = taskList;
         notifyDataSetChanged();
     }
@@ -76,6 +76,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         bundle.putString("subject", item.getSubject());
         bundle.putString("note", item.getNote());
 
+        AddNewItem task = new AddNewItem();
+        task.setArguments(bundle);
+        task.show(activity.getSupportFragmentManager(), task.getTag());
 
     }
 
