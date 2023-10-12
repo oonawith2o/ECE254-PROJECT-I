@@ -28,7 +28,8 @@
             android:layout_columnWeight="1"
             android:hint="TASK"
             android:inputType="textCapCharacters"
-            android:minHeight="48dp"/>
+            android:minHeight="48dp"
+            android:enabled="true"/>
 
         <EditText
             android:id="@+id/editTextNote"
@@ -40,7 +41,8 @@
             android:layout_columnWeight="1"
             android:hint="Notes"
             android:inputType="text"
-            android:minHeight="48dp" />
+            android:minHeight="48dp"
+            android:enabled="true"/>
 
         <Button
             android:id="@+id/saveButton"

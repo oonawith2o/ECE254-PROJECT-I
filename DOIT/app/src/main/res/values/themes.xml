@@ -1,11 +1,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.DOIT" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
-    <style name="Theme.DOIT" parent="Base.Theme.DOIT" />
+    <style name="Theme.DOIT" parent="Base.Theme.DOIT">
+        <item name="windowActionBar">false</item>
+        <item name="tint">@color/beige</item>
+    </style>
 
     <style name="Theme.DOIT.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/beige</item>

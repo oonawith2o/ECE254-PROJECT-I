@@ -1,6 +1,7 @@
 package com.example.doit;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -10,6 +11,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -46,14 +48,14 @@ public class AddNewItem extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return super.onCreateDialog(savedInstanceState);
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+        return dialog;
     }
 
     @SuppressLint("ResourceAsColor")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceStatus) {
         super.onViewCreated(view, savedInstanceStatus);
-
         saveButton = view.findViewById(R.id.saveButton);
         saveButton.setEnabled(false);
         saveButton.setBackgroundColor(R.color.dark);
@@ -76,12 +78,9 @@ public class AddNewItem extends DialogFragment {
             editNote.setText(note);
 
             if (subject.length() > 0) {
-                editSubject.setEnabled(false);
+                saveButton.setEnabled(false);
             }
 
-            if(note.length() > 0) {
-                editNote.setEnabled(false);
-            }
         }
 
         editSubject.addTextChangedListener(new TextWatcher() {
@@ -137,6 +136,10 @@ public class AddNewItem extends DialogFragment {
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
+        Activity activity = getActivity();
+        if (activity instanceof OnDialogCloseListner){
+            ((OnDialogCloseListner)activity).onDialogClose(dialog);
+        }
 
     }
 }

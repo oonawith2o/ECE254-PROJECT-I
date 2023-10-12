@@ -2,13 +2,16 @@ package com.example.doit;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.splashscreen.SplashScreen;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 
 import com.example.doit.Adapter.ItemAdapter;
 import com.example.doit.Model.Item;
@@ -33,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements OnDialogCloseList
         SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
 
         mainRecyclerView = findViewById(R.id.recyclerView);
@@ -49,7 +53,13 @@ public class MainActivity extends AppCompatActivity implements OnDialogCloseList
         Collections.reverse(mainList);
         adapter.setTask(mainList);
 
-        mainAddButton.setOnClickListener(view -> AddNewItem.newInstance().show(getSupportFragmentManager() , AddNewItem.TAG));
+        mainAddButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment dialog = AddNewItem.newInstance();
+                dialog.show(getSupportFragmentManager(), AddNewItem.TAG);
+            }
+        });
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new RecyclerViewTouchHelper(adapter));
         itemTouchHelper.attachToRecyclerView(mainRecyclerView);

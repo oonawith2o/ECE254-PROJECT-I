@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:theme="@style/Theme.DOIT">
 
     <RelativeLayout
         android:id="@+id/titlePanel"
@@ -46,6 +47,7 @@
         android:layout_marginBottom="10dp"
         android:backgroundTint="@color/blue"
         android:contentDescription="Add Button"
-        android:src="@drawable/ic_add_list" />
+        android:src="@drawable/ic_add_list"
+        android:tint="@color/beige"/>
 
 </RelativeLayout>

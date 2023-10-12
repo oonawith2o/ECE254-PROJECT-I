@@ -3,6 +3,7 @@ package com.example.doit;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Canvas;
+import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -48,6 +49,7 @@ public class RecyclerViewTouchHelper extends ItemTouchHelper.SimpleCallback {
                 }
             });
             AlertDialog dialog = builder.create();
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.show();
         }else{
             adapter.editTask(position);
