@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,6 +23,7 @@ import androidx.fragment.app.DialogFragment;
 import com.example.doit.Model.Item;
 import com.example.doit.Utils.DataBaseHelper;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class AddNewItem extends DialogFragment {
@@ -74,6 +76,7 @@ public class AddNewItem extends DialogFragment {
             isUpdated = true;
             String subject = Objects.requireNonNull(bundle.get("subject")).toString();
             String note = Objects.requireNonNull(bundle.get("note")).toString();
+
             editSubject.setText(subject);
             editNote.setText(note);
 
@@ -121,6 +124,9 @@ public class AddNewItem extends DialogFragment {
                     Item item = new Item();
                     item.setSubject(subject);
                     item.setNote(note);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        item.setCreationDateTime(LocalDateTime.now());
+                    }
                     item.setCompleted(false);
                     database.insertTask(item);
                 }

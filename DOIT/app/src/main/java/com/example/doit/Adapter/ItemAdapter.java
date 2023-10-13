@@ -46,8 +46,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         holder.itemCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                item.setCompleted(b);
-                database.updateTask(item.getItemID(), item.getSubject(), item.getNote());
+                if (b){
+                    database.updateCompleted(item.getItemID() , 1);
+                }else
+                    database.updateCompleted(item.getItemID() , 0);
             }
         });
     }
@@ -75,7 +77,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         bundle.putInt("id", item.getItemID());
         bundle.putString("subject", item.getSubject());
         bundle.putString("note", item.getNote());
-
+        bundle.putInt("completed", (item.isCompleted() ? 1 : 0));
         AddNewItem task = new AddNewItem();
         task.setArguments(bundle);
         task.show(activity.getSupportFragmentManager(), task.getTag());
