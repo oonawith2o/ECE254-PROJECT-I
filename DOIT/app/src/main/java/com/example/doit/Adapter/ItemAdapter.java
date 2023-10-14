@@ -1,5 +1,6 @@
 package com.example.doit.Adapter;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.example.doit.Model.Item;
 import com.example.doit.R;
 import com.example.doit.Utils.DataBaseHelper;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
@@ -43,6 +45,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         holder.itemCheckBox.setChecked(item.isCompleted());
         holder.itemSubject.setText(item.getSubject());
         holder.itemNote.setText(item.getNote());
+        @SuppressLint({"NewApi", "LocalSuppress"})
+        String formattedCreation = item.getCreationDateTime().format(DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm"));
+        holder.itemCreation.setText(formattedCreation);
         holder.itemCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -96,12 +101,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         CheckBox itemCheckBox;
         TextView itemSubject;
         TextView itemNote;
+        TextView itemCreation;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             itemCheckBox = itemView.findViewById(R.id.checkboxCompleted);
             itemSubject = itemView.findViewById(R.id.itemSubject);
             itemNote = itemView.findViewById(R.id.itemNote);
+            itemCreation = itemView.findViewById(R.id.itemCreation);
         }
     }
 }

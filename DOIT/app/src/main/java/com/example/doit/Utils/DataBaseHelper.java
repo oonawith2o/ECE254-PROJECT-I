@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 
 import com.example.doit.Model.Item;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String COL_2 = "SUBJECT";
     private static final String COL_3 = "NOTE";
     private static final String COL_4 = "COMPLETED";
+    private static final String COL_5 = "CREATED";
 
     public DataBaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -31,7 +33,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(ID INTEGER PRIMARY KEY AUTOINCREMENT , SUBJECT TEXT , NOTE TEXT, COMPLETED INTEGER)");
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(ID INTEGER PRIMARY KEY AUTOINCREMENT , SUBJECT TEXT , NOTE TEXT, COMPLETED INTEGER, CREATED TEXT)");
     }
 
     @Override
@@ -40,12 +42,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
+    @SuppressLint("NewApi")
     public void insertTask(Item item) {
         database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL_2, item.getSubject());
         contentValues.put(COL_3, item.getNote());
         contentValues.put(COL_4, item.isCompleted());
+        contentValues.put(COL_5, String.valueOf(LocalDateTime.now()));
         database.insert(TABLE_NAME, null, contentValues);
     }
 
@@ -69,7 +73,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         database.delete(TABLE_NAME, "ID=?", new String[]{String.valueOf(item.getItemID())});
     }
 
-    @SuppressLint("Range")
+    @SuppressLint({"Range", "NewApi"})
     public List<Item> getAllTasks() {
 
         database = this.getWritableDatabase();
@@ -87,6 +91,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                         item.setSubject(cursor.getString(cursor.getColumnIndex(COL_2)));
                         item.setNote(cursor.getString(cursor.getColumnIndex(COL_3)));
                         item.setCompleted(cursor.getInt(cursor.getColumnIndex(COL_4))==1);
+                        item.setCreationDateTime(LocalDateTime.parse(cursor.getString(cursor.getColumnIndex(COL_5))));
                         taskList.add(item);
                     } while (cursor.moveToNext());
                 }

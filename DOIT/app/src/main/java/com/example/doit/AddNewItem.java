@@ -76,14 +76,8 @@ public class AddNewItem extends DialogFragment {
             isUpdated = true;
             String subject = Objects.requireNonNull(bundle.get("subject")).toString();
             String note = Objects.requireNonNull(bundle.get("note")).toString();
-
             editSubject.setText(subject);
             editNote.setText(note);
-
-            if (subject.length() > 0) {
-                saveButton.setEnabled(false);
-            }
-
         }
 
         editSubject.addTextChangedListener(new TextWatcher() {
