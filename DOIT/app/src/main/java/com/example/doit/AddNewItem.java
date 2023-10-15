@@ -58,11 +58,10 @@ public class AddNewItem extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceStatus) {
         super.onViewCreated(view, savedInstanceStatus);
+
         saveButton = view.findViewById(R.id.saveButton);
         saveButton.setEnabled(false);
-        saveButton.setBackgroundColor(R.color.dark);
-        saveButton.setTextColor(Color.WHITE);
-        Button cancleButton = view.findViewById(R.id.cancelButton);
+        Button cancelButton = view.findViewById(R.id.cancelButton);
         editSubject = view.findViewById(R.id.editTextSubject);
         editNote = view.findViewById(R.id.editTextNote);
 
@@ -80,23 +79,23 @@ public class AddNewItem extends DialogFragment {
             editNote.setText(note);
         }
 
-        editSubject.addTextChangedListener(new TextWatcher() {
-            @SuppressLint("ResourceAsColor")
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        final boolean finalIsUpdate = isUpdated;
 
+        if(isUpdated) {
+            saveButton.setEnabled(true);
+        }
+
+        editSubject.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int i, int i1, int i2) {
             }
 
-            @SuppressLint("ResourceAsColor")
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.toString().equals("")) {
+            public void onTextChanged(CharSequence s, int i, int i1, int i2) {
+                if (s.toString().equals("")) {
                     saveButton.setEnabled(false);
-                    saveButton.setBackgroundColor(R.color.dark);
-                    saveButton.setTextColor(Color.WHITE);
                 } else {
                     saveButton.setEnabled(true);
-                    saveButton.setBackgroundColor(R.color.blue);
                 }
             }
 
@@ -105,7 +104,7 @@ public class AddNewItem extends DialogFragment {
 
             }
         });
-        final boolean finalIsUpdate = isUpdated;
+
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,7 +128,7 @@ public class AddNewItem extends DialogFragment {
             }
         });
 
-        cancleButton.setOnClickListener(view1 -> dismiss());
+        cancelButton.setOnClickListener(view1 -> dismiss());
 
     }
 
